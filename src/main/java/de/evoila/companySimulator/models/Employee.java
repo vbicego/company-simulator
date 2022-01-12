@@ -34,4 +34,10 @@ public class Employee {
     @ManyToOne
     private Project project;
 
+    public Employee(String firstName, String lastName, String email, Speciality speciality) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.speciality = speciality;
+    }
 }

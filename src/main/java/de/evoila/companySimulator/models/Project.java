@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -27,4 +28,9 @@ public class Project {
     @OneToMany
     private List<Employee> employeeList;
 
+    public Project(String companyName, String projectName, List<Employee> employeeList) {
+        this.companyName = companyName;
+        this.projectName = projectName;
+        this.employeeList = employeeList;
+    }
 }
