@@ -25,7 +25,7 @@ public class Project {
     @NotNull
     private String projectName;
 
-    public Project(String companyName, String projectName, List<Employee> employeeList) {
+    public Project(String companyName, String projectName) {
         this.companyName = companyName;
         this.projectName = projectName;
     }

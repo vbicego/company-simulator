@@ -7,10 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import javax.validation.Valid;
 
 @Service
 public class ProjectService {
@@ -22,21 +18,21 @@ public class ProjectService {
         return new ResponseEntity<>(projectRepository.findAll(), HttpStatus.FOUND);
     }
 
-    public ResponseEntity<?> findProjectById(@PathVariable Long id) {
+    public ResponseEntity<?> findProjectById(Long id) {
         return new ResponseEntity<>(projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id)), HttpStatus.FOUND);
     }
 
-    public ResponseEntity<?> createProject(@RequestBody @Valid Project projectToCreate) {
+    public ResponseEntity<?> createProject(Project projectToCreate) {
         return new ResponseEntity<>(projectRepository.save(projectToCreate), HttpStatus.CREATED);
     }
 
-    public ResponseEntity<?> deleteProject(@PathVariable Long id) {
+    public ResponseEntity<?> deleteProject(Long id) {
         projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
         projectRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity<?> updateProject(@RequestBody @Valid Project updatedProject, @PathVariable Long id) {
+    public ResponseEntity<?> updateProject(Project updatedProject, Long id) {
         Project foundProject = projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
         foundProject.setCompanyName(updatedProject.getCompanyName());
         foundProject.setProjectName(updatedProject.getProjectName());

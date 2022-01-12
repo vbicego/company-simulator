@@ -7,9 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @Service
 public class EmployeeService {
@@ -21,21 +18,21 @@ public class EmployeeService {
         return new ResponseEntity<>(employeeRepository.findAll(), HttpStatus.FOUND);
     }
 
-    public ResponseEntity<?> findEmployeeById(@PathVariable Long id) {
+    public ResponseEntity<?> findEmployeeById(Long id) {
         return new ResponseEntity<>(employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id)), HttpStatus.FOUND);
     }
 
-    public ResponseEntity<?> createEmployee(@RequestBody @Valid Employee employeeToCreate) {
+    public ResponseEntity<?> createEmployee(Employee employeeToCreate) {
         return new ResponseEntity<>(employeeRepository.save(employeeToCreate), HttpStatus.CREATED);
     }
 
-    public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
+    public ResponseEntity<?> deleteEmployee(Long id) {
         employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
         employeeRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity<?> updateEmployee(@RequestBody @Valid Employee updatedEmployee, @PathVariable Long id) {
+    public ResponseEntity<?> updateEmployee(Employee updatedEmployee, Long id) {
         Employee foundEmployee = employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
         foundEmployee.setFirstName(updatedEmployee.getFirstName());
         foundEmployee.setLastName(updatedEmployee.getLastName());
