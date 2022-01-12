@@ -1,6 +1,7 @@
 package de.evoila.companySimulator.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import de.evoila.companySimulator.enums.Speciality;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -28,7 +29,7 @@ public class Employee {
     private String email;
 
     @NotNull
-    private String speciality;
+    private Speciality speciality;
 
     @ManyToOne
     private Project project;
