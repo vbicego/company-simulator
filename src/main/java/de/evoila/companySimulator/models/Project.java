@@ -25,7 +25,8 @@ public class Project {
     @NotNull
     private String projectName;
 
-    @OneToMany
+    @OneToMany (cascade = CascadeType.REFRESH, mappedBy = "id")
+    @JsonManagedReference
     private List<Employee> employeeList;
 
     public Project(String companyName, String projectName, List<Employee> employeeList) {

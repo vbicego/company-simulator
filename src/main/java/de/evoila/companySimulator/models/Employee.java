@@ -1,5 +1,6 @@
 package de.evoila.companySimulator.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import de.evoila.companySimulator.enums.Speciality;
 import lombok.Data;
@@ -32,6 +33,7 @@ public class Employee {
     private Speciality speciality;
 
     @ManyToOne
+    @JsonBackReference
     private Project project;
 
     public Employee(String firstName, String lastName, String email, Speciality speciality) {
