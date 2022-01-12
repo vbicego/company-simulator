@@ -1,10 +1,8 @@
 package de.evoila.companySimulator.controllers;
 
-import de.evoila.companySimulator.exceptions.ProjectNotFoundException;
 import de.evoila.companySimulator.models.Project;
-import de.evoila.companySimulator.repositories.ProjectRepository;
+import de.evoila.companySimulator.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,39 +13,31 @@ import javax.validation.Valid;
 public class ProjectController {
 
     @Autowired
-    ProjectRepository projectRepository;
+    ProjectService projectService;
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllProjects() {
-        return new ResponseEntity<>(projectRepository.findAll(), HttpStatus.FOUND);
+        return projectService.getAllProjects();
     }
 
     @GetMapping("/find/{id}")
     public ResponseEntity<?> findProjectById(@PathVariable Long id) {
-        return new ResponseEntity<>(projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id)), HttpStatus.FOUND);
+        return projectService.findProjectById(id);
     }
 
     @PostMapping("/new")
     public ResponseEntity<?> createProject(@RequestBody @Valid Project projectToCreate) {
-        return new ResponseEntity<>(projectRepository.save(projectToCreate), HttpStatus.CREATED);
+        return projectService.createProject(projectToCreate);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteProject(@PathVariable Long id) {
-        projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
-        projectRepository.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return projectService.deleteProject(id);
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateProject(@RequestBody @Valid Project updatedProject, @PathVariable Long id) {
-
-        Project foundProject = projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
-
-        foundProject.setCompanyName(updatedProject.getCompanyName());
-        foundProject.setProjectName(updatedProject.getProjectName());
-
-        return new ResponseEntity<>(projectRepository.save(foundProject), HttpStatus.OK);
+        return projectService.updateProject(updatedProject, id);
     }
 
 }

@@ -1,10 +1,8 @@
 package de.evoila.companySimulator.controllers;
 
-import de.evoila.companySimulator.exceptions.EmployeeNotFoundException;
 import de.evoila.companySimulator.models.Employee;
-import de.evoila.companySimulator.repositories.EmployeeRepository;
+import de.evoila.companySimulator.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,42 +13,31 @@ import javax.validation.Valid;
 public class EmployeeController {
 
     @Autowired
-    EmployeeRepository employeeRepository;
+    EmployeeService employeeService;
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllEmployees() {
-        return new ResponseEntity<>(employeeRepository.findAll(), HttpStatus.FOUND);
+        return employeeService.getAllEmployees();
     }
 
     @GetMapping("/find/{id}")
     public ResponseEntity<?> findEmployeeById(@PathVariable Long id) {
-        return new ResponseEntity<>(employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id)), HttpStatus.FOUND);
+        return employeeService.findEmployeeById(id);
     }
 
     @PostMapping("/new")
     public ResponseEntity<?> createEmployee(@RequestBody @Valid Employee employeeToCreate) {
-        return new ResponseEntity<>(employeeRepository.save(employeeToCreate), HttpStatus.CREATED);
+        return employeeService.createEmployee(employeeToCreate);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
-        employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
-        employeeRepository.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return employeeService.deleteEmployee(id);
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateEmployee(@RequestBody @Valid Employee updatedEmployee, @PathVariable Long id) {
-
-        Employee foundEmployee = employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
-
-        foundEmployee.setFirstName(updatedEmployee.getFirstName());
-        foundEmployee.setLastName(updatedEmployee.getLastName());
-        foundEmployee.setEmail(updatedEmployee.getEmail());
-        foundEmployee.setSpeciality(updatedEmployee.getSpeciality());
-        foundEmployee.setProject(updatedEmployee.getProject());
-
-        return new ResponseEntity<>(employeeRepository.save(foundEmployee), HttpStatus.OK);
+        return employeeService.updateEmployee(updatedEmployee, id);
     }
 
 }
