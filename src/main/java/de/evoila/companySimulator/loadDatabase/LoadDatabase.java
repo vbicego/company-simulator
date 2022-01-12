@@ -2,7 +2,6 @@ package de.evoila.companySimulator.loadDatabase;
 
 import de.evoila.companySimulator.enums.Speciality;
 import de.evoila.companySimulator.models.Employee;
-import de.evoila.companySimulator.models.Project;
 import de.evoila.companySimulator.repositories.EmployeeRepository;
 import de.evoila.companySimulator.repositories.ProjectRepository;
 import org.slf4j.Logger;
@@ -10,8 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.List;
 
 @Configuration
 public class LoadDatabase {
@@ -35,9 +32,6 @@ public class LoadDatabase {
             log.info("Preloading " + emp4);
             log.info("Preloading " + emp5);
             log.info("Preloading " + emp6);
-
-            log.info("Preloading " + projectRepository.save(new Project("Software GmbH", "HomePage", List.of(emp1, emp2, emp3))));
-            log.info("Preloading " + projectRepository.save(new Project("Bank GmbH", "LoginPage", List.of(emp5, emp6))));
 
         };
     }

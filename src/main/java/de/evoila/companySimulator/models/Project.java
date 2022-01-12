@@ -1,12 +1,12 @@
 package de.evoila.companySimulator.models;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -16,7 +16,7 @@ import java.util.List;
 public class Project {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
@@ -25,13 +25,9 @@ public class Project {
     @NotNull
     private String projectName;
 
-    @OneToMany (cascade = CascadeType.REFRESH, mappedBy = "id")
-    @JsonManagedReference
-    private List<Employee> employeeList;
-
     public Project(String companyName, String projectName, List<Employee> employeeList) {
         this.companyName = companyName;
         this.projectName = projectName;
-        this.employeeList = employeeList;
     }
+
 }

@@ -46,7 +46,6 @@ public class ProjectController {
 
         foundProject.setCompanyName(updatedProject.getCompanyName());
         foundProject.setProjectName(updatedProject.getProjectName());
-        foundProject.setEmployeeList(updatedProject.getEmployeeList());
 
         return new ResponseEntity<>(projectRepository.save(foundProject), HttpStatus.OK);
     }

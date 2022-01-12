@@ -1,7 +1,5 @@
 package de.evoila.companySimulator.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import de.evoila.companySimulator.enums.Speciality;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +7,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Entity
 @Data
@@ -17,7 +14,7 @@ import java.util.List;
 public class Employee {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
@@ -32,8 +29,7 @@ public class Employee {
     @NotNull
     private Speciality speciality;
 
-    @ManyToOne
-    @JsonBackReference
+    @ManyToOne(cascade = CascadeType.ALL)
     private Project project;
 
     public Employee(String firstName, String lastName, String email, Speciality speciality) {
@@ -42,4 +38,5 @@ public class Employee {
         this.email = email;
         this.speciality = speciality;
     }
+
 }
