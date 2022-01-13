@@ -5,7 +5,6 @@ import de.evoila.companySimulator.models.Project;
 import de.evoila.companySimulator.repositories.ProjectRepository;
 import de.evoila.companySimulator.services.ProjectService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,117 +39,101 @@ class ProjectServiceTests {
     }
 
     @Test
-    @DisplayName("Test getAllProjects - OK")
-    public void testGetAllProjects() {
+    public void getAllProjectsShouldReturnFoundAndListOfProjects() {
         Mockito.when(projectRepository.findAll()).thenReturn(projectList);
         assertEquals(new ResponseEntity<>(projectList, HttpStatus.FOUND), projectService.getAllProjects());
     }
 
     @Test
-    @DisplayName("Test getAllProjects - FALSE - wrong Http Status")
-    public void testGetAllProjectsWrongHttp() {
+    public void getAllProjectsShouldReturnFound() {
         Mockito.when(projectRepository.findAll()).thenReturn(projectList);
         assertNotEquals(new ResponseEntity<>(projectList, HttpStatus.OK), projectService.getAllProjects());
     }
 
     @Test
-    @DisplayName("Test getAllProjects - FALSE - not all Projects")
-    public void testGetAllProjectsNotAllProjects() {
+    public void getAllProjectsShouldReturnAllSavedProjects() {
         Mockito.when(projectRepository.findAll()).thenReturn(projectList);
         assertNotEquals(new ResponseEntity<>(p2, HttpStatus.FOUND), projectService.getAllProjects());
     }
 
     @Test
-    @DisplayName("Test findProjectById - OK")
-    public void testFindProjectById() {
+    public void findProjectByIdShouldReturnFoundAndTheFoundProject() {
         Mockito.when(projectRepository.findById(1L)).thenReturn(Optional.ofNullable(p1));
         assertEquals(new ResponseEntity<>(p1, HttpStatus.FOUND), projectService.findProjectById(1L));
     }
 
     @Test
-    @DisplayName("Test findProjectById - FALSE - wrong Http Status")
-    public void testFindProjectByIdWrongHttp() {
+    public void findProjectByIdShouldReturnFound() {
         Mockito.when(projectRepository.findById(1L)).thenReturn(Optional.ofNullable(p1));
         assertNotEquals(new ResponseEntity<>(p1, HttpStatus.OK), projectService.findProjectById(1L));
     }
 
     @Test
-    @DisplayName("Test findProjectById - FALSE - wrong Project")
-    public void testFindProjectByIdWrongProject() {
+    public void findProjectByIdShouldReturnTheFoundProject() {
         Mockito.when(projectRepository.findById(1L)).thenReturn(Optional.ofNullable(p1));
         assertNotEquals(new ResponseEntity<>(p2, HttpStatus.FOUND), projectService.findProjectById(1L));
     }
 
     @Test
-    @DisplayName("Test createProject - OK")
-    public void testCreateProject() {
+    public void createProjectShouldReturnCreatedAndTheCreatedProject() {
         Mockito.when(projectRepository.save(p1)).thenReturn(p1);
         assertEquals(new ResponseEntity<>(p1, HttpStatus.CREATED), projectService.createProject(p1));
     }
 
     @Test
-    @DisplayName("Test createProject - FALSE - wrong Http Status")
-    public void testCreateProjectWrongHttp() {
+    public void createProjectShouldReturnCreated() {
         Mockito.when(projectRepository.save(p1)).thenReturn(p1);
         assertNotEquals(new ResponseEntity<>(p1, HttpStatus.OK), projectService.createProject(p1));
     }
 
     @Test
-    @DisplayName("Test createProject - FALSE - wrong Employee")
-    public void testCreateProjectWrongEmployees() {
+    public void createProjectShouldReturnTheCreatedProject() {
         Mockito.when(projectRepository.save(p1)).thenReturn(p1);
         assertNotEquals(new ResponseEntity<>(p2, HttpStatus.CREATED), projectService.createProject(p1));
     }
 
     @Test
-    @DisplayName("Test deleteProject - OK")
-    public void testDeleteProject() {
+    public void deleteProjectShouldReturnOk() {
         Mockito.when(projectRepository.findById(1L)).thenReturn(Optional.ofNullable(p1));
         assertEquals(new ResponseEntity<>(HttpStatus.OK), projectService.deleteProject(1L));
     }
 
     @Test
-    @DisplayName("Test deleteProject - FALSE - wrong Http Status")
-    public void testDeleteProjectWrongHttp() {
+    public void deleteProjectShouldNotReturnFoundOrOtherHttpStatus() {
         Mockito.when(projectRepository.findById(1L)).thenReturn(Optional.ofNullable(p1));
         assertNotEquals(new ResponseEntity<>(p1, HttpStatus.FOUND), projectService.deleteProject(1L));
     }
 
     @Test
-    @DisplayName("Test deleteProject - FALSE - project not found")
-    public void testDeleteProjectProjectNotFound() {
+    public void deleteProjectThrowAnExceptionWhenTheGivenIdNotCorrespondToAnyProject() {
         Mockito.when(projectRepository.findById(1L)).thenReturn(Optional.ofNullable(p1));
         Throwable exception = assertThrows(RuntimeException.class, () -> projectService.deleteProject(5L));
         assertEquals("Project with id: 5 could not be found!", exception.getMessage());
     }
 
     @Test
-    @DisplayName("Test updateProject - OK")
-    public void testUpdateProject() {
+    public void updateProjectShouldReturnOkAndTheUpdatedProject() {
         Mockito.when(projectRepository.findById(1L)).thenReturn(Optional.ofNullable(p1));
         Mockito.when(projectRepository.save(p1)).thenReturn(p1);
         assertEquals(new ResponseEntity<>(p1, HttpStatus.OK), projectService.updateProject(p1, 1L));
     }
 
     @Test
-    @DisplayName("Test updateProject - FALSE - wrong Http Status")
-    public void testUpdateProjectWrongHttp() {
+    public void updateProjectShouldReturnOk() {
         Mockito.when(projectRepository.findById(1L)).thenReturn(Optional.ofNullable(p1));
         Mockito.when(projectRepository.save(p1)).thenReturn(p1);
         assertNotEquals(new ResponseEntity<>(p1, HttpStatus.CREATED), projectService.updateProject(p1, 1L));
     }
 
     @Test
-    @DisplayName("Test updateProject - FALSE - wrong project")
-    public void testUpdateProjectWrongProject() {
+    public void updateProjectShouldReturnTheUpdatedProject() {
         Mockito.when(projectRepository.findById(1L)).thenReturn(Optional.ofNullable(p1));
         Mockito.when(projectRepository.save(p1)).thenReturn(p1);
         assertNotEquals(new ResponseEntity<>(p2, HttpStatus.OK), projectService.updateProject(p1, 1L));
     }
 
     @Test
-    @DisplayName("Test updateProject - FALSE - project not found")
-    public void testUpdateProjectProjectNotFound() {
+    public void updateProjectThrowAnExceptionWhenTheGivenIdNotCorrespondToAnyProject() {
         Mockito.when(projectRepository.findById(5L)).thenThrow(new EmployeeNotFoundException(5L));
         Throwable exception = assertThrows(RuntimeException.class, () -> projectService.updateProject(p1, 5L));
         assertEquals("Employee with id: 5 could not be found!", exception.getMessage());

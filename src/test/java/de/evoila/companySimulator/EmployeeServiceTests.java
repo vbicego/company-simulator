@@ -6,7 +6,6 @@ import de.evoila.companySimulator.models.Employee;
 import de.evoila.companySimulator.repositories.EmployeeRepository;
 import de.evoila.companySimulator.services.EmployeeService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,117 +42,101 @@ class EmployeeServiceTests {
     }
 
     @Test
-    @DisplayName("Test getAllEmployees - OK")
-    public void testGetAllEmployees() {
+    public void getAllEmployeesShouldReturnFoundAndListOfEmployees() {
         Mockito.when(employeeRepository.findAll()).thenReturn(employeeList);
         assertEquals(new ResponseEntity<>(employeeList, HttpStatus.FOUND), employeeService.getAllEmployees());
     }
 
     @Test
-    @DisplayName("Test getAllEmployees - FALSE - wrong Http Status")
-    public void testGetAllEmployeesWrongHttp() {
+    public void getAllEmployeesShouldReturnFound() {
         Mockito.when(employeeRepository.findAll()).thenReturn(employeeList);
         assertNotEquals(new ResponseEntity<>(employeeList, HttpStatus.OK), employeeService.getAllEmployees());
     }
 
     @Test
-    @DisplayName("Test getAllEmployees - FALSE - not all Employees")
-    public void testGetAllEmployeesNotAllEmployees() {
+    public void getAllEmployeesShouldReturnAllSavedEmployees() {
         Mockito.when(employeeRepository.findAll()).thenReturn(employeeList);
         assertNotEquals(new ResponseEntity<>(emp3, HttpStatus.FOUND), employeeService.getAllEmployees());
     }
 
     @Test
-    @DisplayName("Test findEmployeeById - OK")
-    public void testFindEmployeeById() {
+    public void findEmployeeByIdShouldReturnFoundAndAnEmployee() {
         Mockito.when(employeeRepository.findById(1L)).thenReturn(Optional.ofNullable(emp1));
         assertEquals(new ResponseEntity<>(emp1, HttpStatus.FOUND), employeeService.findEmployeeById(1L));
     }
 
     @Test
-    @DisplayName("Test findEmployeeById - FALSE - wrong Http Status")
-    public void testFindEmployeeByIdWrongHttp() {
+    public void findEmployeeByIdShouldReturnFound() {
         Mockito.when(employeeRepository.findById(1L)).thenReturn(Optional.ofNullable(emp1));
         assertNotEquals(new ResponseEntity<>(emp1, HttpStatus.OK), employeeService.getAllEmployees());
     }
 
     @Test
-    @DisplayName("Test findEmployeeById - FALSE - wrong Employee")
-    public void testFindEmployeeByIdWrongEmployees() {
+    public void findEmployeesByIdShouldReturnTheEmployeeCorrespondentToTheGivenId() {
         Mockito.when(employeeRepository.findById(1L)).thenReturn(Optional.ofNullable(emp1));
         assertNotEquals(new ResponseEntity<>(emp2, HttpStatus.FOUND), employeeService.getAllEmployees());
     }
 
     @Test
-    @DisplayName("Test createEmployee - OK")
-    public void testCreateEmployee() {
+    public void createEmployeeShouldReturnOkAndTheCreatedEmployee() {
         Mockito.when(employeeRepository.save(emp1)).thenReturn(emp1);
         assertEquals(new ResponseEntity<>(emp1, HttpStatus.CREATED), employeeService.createEmployee(emp1));
     }
 
     @Test
-    @DisplayName("Test createEmployee - FALSE - wrong Http Status")
-    public void testCreateEmployeeWrongHttp() {
+    public void createEmployeeShouldReturnOk() {
         Mockito.when(employeeRepository.save(emp1)).thenReturn(emp1);
         assertNotEquals(new ResponseEntity<>(emp1, HttpStatus.OK), employeeService.createEmployee(emp1));
     }
 
     @Test
-    @DisplayName("Test createEmployee - FALSE - wrong Employee")
-    public void testCreateEmployeeWrongEmployees() {
+    public void createEmployeeShouldReturnTheCreatedEmployee() {
         Mockito.when(employeeRepository.save(emp1)).thenReturn(emp1);
         assertNotEquals(new ResponseEntity<>(emp2, HttpStatus.CREATED), employeeService.createEmployee(emp1));
     }
 
     @Test
-    @DisplayName("Test deleteEmployee - OK")
-    public void testDeleteEmployee() {
+    public void deleteEmployeeShouldReturnOk() {
         Mockito.when(employeeRepository.findById(1L)).thenReturn(Optional.ofNullable(emp1));
         assertEquals(new ResponseEntity<>(HttpStatus.OK), employeeService.deleteEmployee(1L));
     }
 
     @Test
-    @DisplayName("Test deleteEmployee - FALSE - wrong Http Status")
-    public void testDeleteEmployeeWrongHttp() {
+    public void deleteEmployeeShouldNotReturnFoundOrOtherHttpStatus() {
         Mockito.when(employeeRepository.findById(1L)).thenReturn(Optional.ofNullable(emp1));
         assertNotEquals(new ResponseEntity<>(emp1, HttpStatus.FOUND), employeeService.deleteEmployee(1L));
     }
 
     @Test
-    @DisplayName("Test deleteEmployee - FALSE - employee not found")
-    public void testDeleteEmployeeEmployeeNotFound() {
+    public void deleteEmployeeThrowAnExceptionWhenTheGivenIdNotCorrespondToAnyEmployee() {
         Mockito.when(employeeRepository.findById(5L)).thenThrow(new EmployeeNotFoundException(5L));
         Throwable exception = assertThrows(RuntimeException.class, () -> employeeService.deleteEmployee(5L));
         assertEquals("Employee with id: 5 could not be found!", exception.getMessage());
     }
 
     @Test
-    @DisplayName("Test updateEmployee - OK")
-    public void testUpdateEmployee() {
+    public void updateEmployeeShouldReturnOkAndTheUpdatedEmployee() {
         Mockito.when(employeeRepository.findById(1L)).thenReturn(Optional.ofNullable(emp1));
         Mockito.when(employeeRepository.save(emp1)).thenReturn(emp1);
         assertEquals(new ResponseEntity<>(emp1, HttpStatus.OK), employeeService.updateEmployee(emp1, 1L));
     }
 
     @Test
-    @DisplayName("Test updateEmployee - FALSE - wrong Http Status")
-    public void testUpdateEmployeeWrongHttp() {
+    public void updateEmployeeShouldReturnOk() {
         Mockito.when(employeeRepository.findById(1L)).thenReturn(Optional.ofNullable(emp1));
         Mockito.when(employeeRepository.save(emp1)).thenReturn(emp1);
         assertNotEquals(new ResponseEntity<>(emp1, HttpStatus.CREATED), employeeService.updateEmployee(emp1, 1L));
     }
 
     @Test
-    @DisplayName("Test updateEmployee - FALSE - wrong Employee")
-    public void testUpdateEmployeeWrongEmployee() {
+    public void updateEmployeeShoudlReturnTheUpdatedEmployee() {
         Mockito.when(employeeRepository.findById(1L)).thenReturn(Optional.ofNullable(emp1));
         Mockito.when(employeeRepository.save(emp1)).thenReturn(emp1);
         assertNotEquals(new ResponseEntity<>(emp2, HttpStatus.OK), employeeService.updateEmployee(emp1, 1L));
     }
 
     @Test
-    @DisplayName("Test updateEmployee - FALSE - employee not found")
-    public void testUpdateEmployeeEmployeeNotFound() {
+    public void updateEmployeeThrowAnExceptionWhenTheGivenIdNotCorrespondToAnyEmployee() {
         Mockito.when(employeeRepository.findById(5L)).thenThrow(new EmployeeNotFoundException(5L));
         Throwable exception = assertThrows(RuntimeException.class, () -> employeeService.updateEmployee(emp1, 5L));
         assertEquals("Employee with id: 5 could not be found!", exception.getMessage());
